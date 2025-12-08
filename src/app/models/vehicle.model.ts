@@ -1,14 +1,15 @@
-import { Tag } from './tag.model';
 import { User } from './user.model';
+import { Tag } from './tag.model';
 
-export type VehicleStatus = 'DRAFT' | 'PUBLISHED';
+
+export type VehicleStatus = 'AVAILABLE' | 'SOLD' | 'ON_HOLD';
 
 export interface Vehicle {
   id: number;
-  title: string;           // vehicle name
+  title: string;
   slug: string;
   excerpt: string;
-  content: string;         // full details/specs
+  content: string;
   author: User;
   tags: Tag[];
   status: VehicleStatus;
