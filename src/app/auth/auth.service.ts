@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, UserRole } from '../models/user.model';
 
+export type Role = 'ADMIN' | 'USER';
+
+export interface AuthUser{
+  email:string;
+  role: Role;
+}
+
+
 interface LoginPayload {
   identifier: string; // username or email
   password: string;

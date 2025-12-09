@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VehicleService } from '../services/vehicle.service';
 import { Vehicle } from '../models/vehicle.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <main style="min-height:100vh; background:#f5f9ff; padding:2rem 1.5rem;">
       <section style="max-width:1100px; margin:0 auto;">
@@ -20,6 +21,10 @@ import { Vehicle } from '../models/vehicle.model';
               Manage bikes & supercars (create, edit, delete).
             </p>
           </div>
+          <button type="button"class="admin-profile-btn"[routerLink]="['/admin/profile']">
+          <span class="admin-avatar"></span>
+          <span>Profile</span>
+          </button>
           <button
             type="button"
             (click)="startCreate()"
@@ -42,87 +47,64 @@ import { Vehicle } from '../models/vehicle.model';
             {{ exists(editVehicle.id) ? 'Edit vehicle' : 'Create vehicle' }}
           </h2>
 
-          <form (ngSubmit)="save()">
-            <div style="display:flex; gap:0.75rem; margin-bottom:0.5rem;">
-              <div style="flex:1;">
-                <label style="font-size:0.8rem; color:#374151;">Title</label>
-                <input
-                  [(ngModel)]="editVehicle.title"
-                  name="title"
-                  style="width:100%; padding:0.4rem 0.6rem; border-radius:0.5rem;
-                         border:1px solid #cbd5f5; font-size:0.85rem;"
-                  required
-                />
-              </div>
-              <div style="flex:1;">
-                <label style="font-size:0.8rem; color:#374151;">Slug</label>
-                <input
-                  [(ngModel)]="editVehicle.slug"
-                  name="slug"
-                  style="width:100%; padding:0.4rem 0.6rem; border-radius:0.5rem;
-                         border:1px solid #cbd5f5; font-size:0.85rem;"
-                  required
-                />
-              </div>
-            </div>
+          <form (ngSubmit)="save()" class="vehicle-form">
+  <div class="form-row">
+    <div class="form-field">
+      <label>Title</label>
+      <input
+        [(ngModel)]="editVehicle.title"
+        name="title"
+        required
+      />
+    </div>
+    <div class="form-field">
+      <label>Slug</label>
+      <input
+        [(ngModel)]="editVehicle.slug"
+        name="slug"
+        required
+      />
+    </div>
+  </div>
 
-            <div style="margin-bottom:0.5rem;">
-              <label style="font-size:0.8rem; color:#374151;">Excerpt</label>
-              <textarea
-                [(ngModel)]="editVehicle.excerpt"
-                name="excerpt"
-                rows="2"
-                style="width:100%; padding:0.4rem 0.6rem; border-radius:0.5rem;
-                       border:1px solid #cbd5f5; font-size:0.85rem; resize:vertical;"
-              ></textarea>
-            </div>
+  <div class="form-field">
+    <label>Excerpt</label>
+    <textarea
+      [(ngModel)]="editVehicle.excerpt"
+      name="excerpt"
+      rows="2"
+    ></textarea>
+  </div>
 
-            <div style="margin-bottom:0.5rem;">
-              <label style="font-size:0.8rem; color:#374151;">Image URL</label>
-              <input
-                [(ngModel)]="editVehicle.imageUrl"
-                name="imageUrl"
-                placeholder="Paste direct image link (jpg/png)"
-                style="width:100%; padding:0.4rem 0.6rem; border-radius:0.5rem;
-                       border:1px solid #cbd5f5; font-size:0.85rem;"
-              />
-            </div>
+  <div class="form-field">
+    <label>Image URL</label>
+    <input
+      [(ngModel)]="editVehicle.imageUrl"
+      name="imageUrl"
+      placeholder="Paste direct image link (jpg/png)"
+    />
+  </div>
 
-            <div style="margin-bottom:0.75rem;">
-              <label style="font-size:0.8rem; color:#374151; margin-right:0.5rem;">
-                Status
-              </label>
-              <select
-                [(ngModel)]="editVehicle.status"
-                name="status"
-                style="padding:0.3rem 0.6rem; border-radius:999px; border:1px solid #cbd5f5;
-                       font-size:0.8rem;"
-              >
-                <option value="AVAILABLE">AVAILABLE</option>
-                <option value="SOLD">SOLD</option>
-                <option value="ON_HOLD">ON_HOLD</option>
-              </select>
-            </div>
+  <div class="form-row">
+    <div class="form-field small">
+      <label>Status</label>
+      <select
+        [(ngModel)]="editVehicle.status"
+        name="status"
+      >
+        <option value="AVAILABLE">AVAILABLE</option>
+        <option value="SOLD">SOLD</option>
+        <option value="ON_HOLD">ON_HOLD</option>
+      </select>
+    </div>
 
-            <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
-              <button
-                type="button"
-                (click)="cancelEdit()"
-                style="padding:0.35rem 0.8rem; border-radius:999px; border:1px solid #e5e7eb;
-                       background:#f9fafb; font-size:0.8rem; cursor:pointer;"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                style="padding:0.35rem 0.9rem; border-radius:999px; border:none;
-                       background:linear-gradient(90deg,#22c55e,#0ea5e9); color:#ffffff;
-                       font-size:0.8rem; font-weight:600; cursor:pointer;"
-              >
-                Save
-              </button>
-            </div>
-          </form>
+    <div class="form-actions">
+      <button type="button" (click)="cancelEdit()">Cancel</button>
+      <button type="submit">Save</button>
+    </div>
+  </div>
+</form>
+
         </section>
 
         <!-- Vehicles table -->

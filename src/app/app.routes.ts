@@ -7,6 +7,7 @@ import { RegisterComponent } from './auth/register.component';
 import { ProfileComponent } from './auth/profile.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard.component';
 import { AdminGuard } from './admin/admin.guard';
+import { AdminProfileComponent } from './admin/admin-profile.component';
 
 export const routes: Routes = [
   // default route → login
@@ -21,7 +22,12 @@ export const routes: Routes = [
   { path: 'editor/new', component: VehicleEditorComponent },
   { path: 'editor/:id', component: VehicleEditorComponent },
 
-  // admin protected by role
+  // put more specific admin route first
+  {
+    path: 'admin/profile',
+    component: AdminProfileComponent,
+    canActivate: [AdminGuard],
+  },
   {
     path: 'admin',
     component: AdminDashboardComponent,

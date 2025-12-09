@@ -65,6 +65,9 @@ import { AuthService } from './auth.service';
   `,
 })
 export class LoginComponent {
+  email = '';
+  password = '';
+  error = '';
   form: FormGroup;
   loginError = false;
 

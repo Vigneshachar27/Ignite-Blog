@@ -131,117 +131,72 @@ type CategoryFilter = 'ALL' | 'BIKES' | 'CARS';
           </div>
         </header>
 
-        <!-- Card grid -->
-        <div
-          style="
-            display:grid;
-            gap:1.5rem;
-            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-          "
-        >
+                <!-- Card grid -->
+        <div class="vehicle-grid">
           <article
+            class="vehicle-card"
             *ngFor="let vehicle of filtered"
             [ngStyle]="{
               border: '1px solid ' + (isDark ? '#1f2937' : '#e5e7eb'),
-              borderRadius: '0.75rem',
-              backgroundColor: isDark ? '#020617' : '#ffffff',
-              padding: '1rem 1.25rem',
-              boxShadow: '0 1px 2px rgba(15,23,42,0.4)'
+              backgroundColor: isDark ? '#020617' : '#ffffff'
             }"
           >
-            <!-- Row: image + text -->
-            <div
-              style="
-                display:flex;
-                align-items:flex-start;
-                gap:1rem;
-              "
-            >
-              <!-- Left: image placeholder / image -->
-              <div
-                style="
-                  flex:0 0 90px;
-                  height:90px;
-                  border-radius:0.75rem;
-                  background-color:#e5e7eb;
-                  overflow:hidden;
-                "
+            <img
+              class="vehicle-card-image"
+              *ngIf="vehicle.imageUrl"
+              [src]="vehicle.imageUrl"
+              [alt]="vehicle.title"
+            />
+
+            <div class="vehicle-card-body">
+              <h2
+                class="vehicle-card-title"
+                [ngStyle]="{
+                  color: isDark ? '#e5e7eb' : '#0f172a'
+                }"
               >
-                <img
-                  *ngIf="vehicle.imageUrl"
-                  [src]="vehicle.imageUrl"
-                  [alt]="vehicle.title"
-                  style="width:100%; height:100%; object-fit:cover;"
-                />
-              </div>
+                {{ vehicle.title }}
+              </h2>
 
-              <!-- Right: text -->
-              <div style="flex:1 1 auto;">
-                <h2
-                  [ngStyle]="{
-                    fontSize: '1.05rem',
-                    fontWeight: 600,
-                    color: isDark ? '#e5e7eb' : '#0f172a',
-                    margin: '0 0 0.25rem 0'
-                  }"
-                >
-                  {{ vehicle.title }}
-                </h2>
+              <p
+                class="vehicle-card-excerpt"
+                [ngStyle]="{
+                  color: isDark ? '#d1d5db' : '#4b5563'
+                }"
+              >
+                {{ vehicle.excerpt }}
+              </p>
 
-                <p
+              <p
+                class="vehicle-card-meta"
+                [ngStyle]="{
+                  color: isDark ? '#9ca3af' : '#6b7280'
+                }"
+              >
+                Status:
+                <span
                   [ngStyle]="{
-                    fontSize: '0.9rem',
-                    color: isDark ? '#d1d5db' : '#4b5563',
-                    margin: '0 0 0.5rem 0'
+                    backgroundColor: vehicle.status === 'AVAILABLE'
+                      ? '#22c55e33'
+                      : vehicle.status === 'SOLD'
+                        ? '#fee2e2'
+                        : '#fef9c3',
+                    color: vehicle.status === 'AVAILABLE'
+                      ? '#15803d'
+                      : vehicle.status === 'SOLD'
+                        ? '#b91c1c'
+                        : '#92400e'
                   }"
+                  class="status-pill"
                 >
-                  {{ vehicle.excerpt }}
-                </p>
-
-                <p
-                  [ngStyle]="{
-                    fontSize: '0.75rem',
-                    color: isDark ? '#9ca3af' : '#6b7280',
-                    margin: '0 0 0.25rem 0'
-                  }"
-                >
-                  Status:
-                  <span
-                    [ngStyle]="{
-                      backgroundColor: vehicle.status === 'AVAILABLE'
-                        ? '#22c55e33'
-                        : vehicle.status === 'SOLD'
-                          ? '#fee2e2'
-                          : '#fef9c3',
-                      color: vehicle.status === 'AVAILABLE'
-                        ? '#15803d'
-                        : vehicle.status === 'SOLD'
-                          ? '#b91c1c'
-                          : '#92400e',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      borderRadius: '999px',
-                      padding: '0.1rem 0.45rem',
-                      fontWeight: 500
-                    }"
-                  >
-                    {{ vehicle.status }}
-                  </span>
-                </p>
-
-                <p
-                  [ngStyle]="{
-                    fontSize: '0.7rem',
-                    color: isDark ? '#6b7280' : '#9ca3af',
-                    margin: 0
-                  }"
-                >
-                  Added on {{ vehicle.createdAt | date: 'mediumDate' }}
-                </p>
-              </div>
+                  {{ vehicle.status }}
+                </span>
+                · Added on {{ vehicle.createdAt | date: 'mediumDate' }}
+              </p>
             </div>
           </article>
         </div>
+
       </section>
     </main>
   `,
@@ -257,7 +212,14 @@ export class VehicleListComponent {
     this.applyFilter();
   }
 
+  ngOnInit(): void {
+    this.applyFilter();
+  }
+
   applyFilter(): void {
+    this.vehicles = this.vehicleService.getAll();
+
+
     const isBike = (v: Vehicle) =>
       ['Hyperbike', 'Superbike', 'Naked', 'Sports Tourer', 'Tourer'].includes(
         v.tags[0]?.name
